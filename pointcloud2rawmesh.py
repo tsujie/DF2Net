@@ -11,7 +11,7 @@ image_path  = './img/'
 for line in cacd_list:
     
     line = line.strip('\n')
-    print line
+    print(line)
     depth_abs_path = depth_mat_path + line.replace('.png','.mat')
     depth_mat_file = sio.loadmat(depth_abs_path)
     depth_mat = depth_mat_file['depth_mat']
@@ -88,27 +88,27 @@ for line in cacd_list:
                    if index_sec[-1]<=index_fir[-1]:
                        
                       for k in range(number_nonzero_first-1):
-                          f_index_1 = long(face_index_map[m,index_fir[k]])
-                          f_index_2 = long(face_index_map[m+1,index_sec[number_nonzero_second-number_nonzero_first+k]])
-                          f_index_3 = long(face_index_map[m+1,index_sec[number_nonzero_second-number_nonzero_first+k+1]])
+                          f_index_1 = int(face_index_map[m,index_fir[k]])
+                          f_index_2 = int(face_index_map[m+1,index_sec[number_nonzero_second-number_nonzero_first+k]])
+                          f_index_3 = int(face_index_map[m+1,index_sec[number_nonzero_second-number_nonzero_first+k+1]])
                           out_ply.write('f'+' '+str(f_index_1)+' '+ str(f_index_3)+' '+str(f_index_2)+'\n')
                           
-                          f_index_4 = long(face_index_map[m,index_fir[k+1]])
-                          f_index_5 = long(face_index_map[m,index_fir[k]])
-                          f_index_6 = long(face_index_map[m+1,index_sec[number_nonzero_second-number_nonzero_first+k+1]])
+                          f_index_4 = int(face_index_map[m,index_fir[k+1]])
+                          f_index_5 = int(face_index_map[m,index_fir[k]])
+                          f_index_6 = int(face_index_map[m+1,index_sec[number_nonzero_second-number_nonzero_first+k+1]])
                           out_ply.write('f'+' '+str(f_index_5)+' '+ str(f_index_4)+' '+str(f_index_6)+'\n')
                    elif index_fir[0]<=index_sec[0]:
                       
                       for j in range(number_nonzero_first-1):
-                          f_index_1 = long(face_index_map[m,index_fir[j]])
-                          f_index_2 = long(face_index_map[m+1,index_sec[j]])
-                          f_index_3 = long(face_index_map[m+1,index_sec[j+1]])
+                          f_index_1 = int(face_index_map[m,index_fir[j]])
+                          f_index_2 = int(face_index_map[m+1,index_sec[j]])
+                          f_index_3 = int(face_index_map[m+1,index_sec[j+1]])
                           
                           out_ply.write('f'+' '+str(f_index_1)+' '+ str(f_index_3)+' '+str(f_index_2)+'\n')
                           
-                          f_index_4 = long(face_index_map[m,index_fir[j+1]])
-                          f_index_5 = long(face_index_map[m,index_fir[j]])
-                          f_index_6 = long(face_index_map[m+1,index_sec[j+1]])
+                          f_index_4 = int(face_index_map[m,index_fir[j+1]])
+                          f_index_5 = int(face_index_map[m,index_fir[j]])
+                          f_index_6 = int(face_index_map[m+1,index_sec[j+1]])
                           out_ply.write('f'+' '+str(f_index_5)+' '+ str(f_index_4)+' '+str(f_index_6)+'\n')
                    else:
                       idx_ori = (np.abs(index_sec-index_fir[0])).argmin()
@@ -127,15 +127,15 @@ for line in cacd_list:
                       common_number = min(second_selected,number_nonzero_first)
                       
                       for r in range(common_number-1):
-                          f_index_1 = long(face_index_map[m,index_fir[r]])
-                          f_index_2 = long(face_index_map[m+1,index_sec[idx+r]])
-                          f_index_3 = long(face_index_map[m+1,index_sec[idx+r+1]])
+                          f_index_1 = int(face_index_map[m,index_fir[r]])
+                          f_index_2 = int(face_index_map[m+1,index_sec[idx+r]])
+                          f_index_3 = int(face_index_map[m+1,index_sec[idx+r+1]])
                           
                           out_ply.write('f'+' '+str(f_index_1)+' '+ str(f_index_3)+' '+str(f_index_2)+'\n')
                           
-                          f_index_4 = long(face_index_map[m,index_fir[r+1]])
-                          f_index_5 = long(face_index_map[m,index_fir[r]])
-                          f_index_6 = long(face_index_map[m+1,index_sec[idx+r+1]])
+                          f_index_4 = int(face_index_map[m,index_fir[r+1]])
+                          f_index_5 = int(face_index_map[m,index_fir[r]])
+                          f_index_6 = int(face_index_map[m+1,index_sec[idx+r+1]])
                           out_ply.write('f'+' '+str(f_index_5)+' '+ str(f_index_4)+' '+str(f_index_6)+'\n')
                                 
                          
@@ -144,53 +144,53 @@ for line in cacd_list:
                    if index_sec[0]>=index_fir[0]:
                       for n in range(number_nonzero_second-1):
                           
-                          f_index_1 = long(face_index_map[m,index_fir[n]])
-                          f_index_2 = long(face_index_map[m+1,index_sec[n]])
-                          f_index_3 = long(face_index_map[m+1,index_sec[n+1]])
+                          f_index_1 = int(face_index_map[m,index_fir[n]])
+                          f_index_2 = int(face_index_map[m+1,index_sec[n]])
+                          f_index_3 = int(face_index_map[m+1,index_sec[n+1]])
                           
                           out_ply.write('f'+' '+str(f_index_1)+' '+ str(f_index_3)+' '+str(f_index_2)+'\n')
                           
-                          f_index_4 = long(face_index_map[m,index_fir[n+1]])
-                          f_index_5 = long(face_index_map[m,index_fir[n]])
-                          f_index_6 = long(face_index_map[m+1,index_sec[n+1]])
+                          f_index_4 = int(face_index_map[m,index_fir[n+1]])
+                          f_index_5 = int(face_index_map[m,index_fir[n]])
+                          f_index_6 = int(face_index_map[m+1,index_sec[n+1]])
                           out_ply.write('f'+' '+str(f_index_5)+' '+ str(f_index_4)+' '+str(f_index_6)+'\n')
                    elif index_fir[-1]<=index_sec[-1]:
                       for p in range(number_nonzero_second-1):
-                          f_index_1 = long(face_index_map[m,index_fir[-number_nonzero_second+number_nonzero_first+p]])
-                          f_index_2 = long(face_index_map[m+1,index_sec[p]])
-                          f_index_3 = long(face_index_map[m+1,index_sec[p+1]])
+                          f_index_1 = int(face_index_map[m,index_fir[-number_nonzero_second+number_nonzero_first+p]])
+                          f_index_2 = int(face_index_map[m+1,index_sec[p]])
+                          f_index_3 = int(face_index_map[m+1,index_sec[p+1]])
                           out_ply.write('f'+' '+str(f_index_1)+' '+ str(f_index_3)+' '+str(f_index_2)+'\n')
                           
-                          f_index_4 = long(face_index_map[m,index_fir[-number_nonzero_second+number_nonzero_first+p+1]])
-                          f_index_5 = long(face_index_map[m,index_fir[-number_nonzero_second+number_nonzero_first+p]])
-                          f_index_6 = long(face_index_map[m+1,index_sec[p+1]])
+                          f_index_4 = int(face_index_map[m,index_fir[-number_nonzero_second+number_nonzero_first+p+1]])
+                          f_index_5 = int(face_index_map[m,index_fir[-number_nonzero_second+number_nonzero_first+p]])
+                          f_index_6 = int(face_index_map[m+1,index_sec[p+1]])
                           out_ply.write('f'+' '+str(f_index_5)+' '+ str(f_index_4)+' '+str(f_index_6)+'\n') 
                    else:
                       idx_ori = (np.abs(index_fir-index_sec[0])).argmin()
-                      print 'type idx_ori',type(idx_ori)
+                      print('type idx_ori',type(idx_ori))
                       idx = idx_ori
                       for q in range(number_nonzero_second-1):
-                          f_index_1 = long(face_index_map[m,index_fir[idx+q]])
-                          f_index_2 = long(face_index_map[m+1,index_sec[q]])
-                          f_index_3 = long(face_index_map[m+1,index_sec[q+1]])
+                          f_index_1 = int(face_index_map[m,index_fir[idx+q]])
+                          f_index_2 = int(face_index_map[m+1,index_sec[q]])
+                          f_index_3 = int(face_index_map[m+1,index_sec[q+1]])
                           out_ply.write('f'+' '+str(f_index_1)+' '+ str(f_index_3)+' '+str(f_index_2)+'\n')
                           
-                          f_index_4 = long(face_index_map[m,index_fir[idx+q+1]])
-                          f_index_5 = long(face_index_map[m,index_fir[idx+q]])
-                          f_index_6 = long(face_index_map[m+1,index_sec[q+1]])
+                          f_index_4 = int(face_index_map[m,index_fir[idx+q+1]])
+                          f_index_5 = int(face_index_map[m,index_fir[idx+q]])
+                          f_index_6 = int(face_index_map[m+1,index_sec[q+1]])
                           out_ply.write('f'+' '+str(f_index_5)+' '+ str(f_index_4)+' '+str(f_index_6)+'\n')
                    
        
                 else:
                    for w in range(number_nonzero_second-1):
-                       f_index_1 = long(face_index_map[m,index_fir[w]])
-                       f_index_2 = long(face_index_map[m+1,index_sec[w+1]])
-                       f_index_3 = long(face_index_map[m+1,index_sec[w]])
+                       f_index_1 = int(face_index_map[m,index_fir[w]])
+                       f_index_2 = int(face_index_map[m+1,index_sec[w+1]])
+                       f_index_3 = int(face_index_map[m+1,index_sec[w]])
                        out_ply.write('f'+' '+str(f_index_1)+' '+ str(f_index_2)+' '+str(f_index_3)+'\n')
                        
-                       f_index_4 = long(face_index_map[m,index_fir[w+1]])
-                       f_index_5 = long(face_index_map[m,index_fir[w]])
-                       f_index_6 = long(face_index_map[m+1,index_sec[w+1]])
+                       f_index_4 = int(face_index_map[m,index_fir[w+1]])
+                       f_index_5 = int(face_index_map[m,index_fir[w]])
+                       f_index_6 = int(face_index_map[m+1,index_sec[w+1]])
                        out_ply.write('f'+' '+str(f_index_5)+' '+ str(f_index_4)+' '+str(f_index_6)+'\n')
     
                  

@@ -33,7 +33,7 @@ class DNet(nn.Module):
     # input is 128 x 128
     layer_idx += 1
     name = 'layer%d' % layer_idx
-    print 'name',name
+    print('name',name)
     layer2 = blockUNet(nf, nf*2, name, transposed=False, bn=True, relu=False, dropout=False)
     # input is 64 x 64
     layer_idx += 1

@@ -25,7 +25,7 @@ import scipy
 import scipy.io as sio
 import cv2
 from DNet import DNet
-os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+#os.environ['CUDA_VISIBLE_DEVICES'] = '3'
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
     and callable(models.__dict__[name]))
@@ -81,7 +81,7 @@ def face_reconstruction(resume):
 
 
     for i, (input,img_name) in enumerate(demo_loader):
-        
+        print('process: ', img_name)
         img_name = str(img_name)
         img_name = img_name[2:-2]
         out_mat_name = out_dir+img_name.replace('.png','.mat')
@@ -103,7 +103,7 @@ def face_reconstruction(resume):
            out_im = output_shape[0,0,:,:]
            out_im = out_im*mask_n[:,:]
            sio.savemat(out_mat_name,{'depth_mat':out_im})
-           print img_name
+           print(img_name)
             
 
 
@@ -114,4 +114,4 @@ if __name__ == '__main__':
     start = time.clock()
     face_reconstruction(model_path)
     elapsed = (time.clock() - start)
-    print 'Time used: ',elapsed
+    print('Time used: ',elapsed)

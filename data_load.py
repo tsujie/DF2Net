@@ -80,7 +80,7 @@ def crop_face_mask(img_path):
           all_points[:,18] = all_points[:,18] +4
           all_points[:,19] = all_points[:,19] +4
           all_points[:,20] = all_points[:,20] +4
-          print all_points
+          print(all_points)
           mask = np.zeros((224,224,1))
           mask_mask = np.zeros((224,224,1))
           all_points = all_points.transpose(1,0)
@@ -117,7 +117,7 @@ class ImageDataset(data.Dataset):
 
     def __getitem__(self, index):
         path,img_name = self.imgs[index]
-        print 'path',path
+        print('path',path)
         crop_face_mask(path)
         img = Image.open(path.replace('.png','_crop.png')).convert("RGB")
         if self.transform is not None:

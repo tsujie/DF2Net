@@ -26,6 +26,7 @@ import scipy.io as sio
 import cv2
 from DNet import DNet
 #os.environ['CUDA_VISIBLE_DEVICES'] = '3'
+enable_cuda = False
 model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
     and callable(models.__dict__[name]))
@@ -69,21 +70,29 @@ def face_reconstruction(resume):
 
     model = None
     model = DNet(3,1,64)
-    model = torch.nn.DataParallel(model).cuda()
+    if enable_cuda:
+      model = torch.nn.DataParallel(model).cuda()
+    else:
+      model = torch.nn.DataParallel(model)
     model.eval()
 
 
 
     assert(os.path.isfile(resume))
-    checkpoint = torch.load(resume)
+    if enable_cuda:
+      checkpoint = torch.load(resume)
+    else:
+      checkpoint = torch.load(resume, map_location=torch.device('cpu'))
+      
     model.load_state_dict(checkpoint['state_dict'])
     cudnn.benchmark = True
 
 
     for i, (input,img_name) in enumerate(demo_loader):
+        img_name = img_name[0]
         print('process: ', img_name)
         img_name = str(img_name)
-        img_name = img_name[2:-2]
+        #img_name = img_name[2:-2]
         out_mat_name = out_dir+img_name.replace('.png','.mat')
 
         input_var = torch.autograd.Variable(input, volatile=True)

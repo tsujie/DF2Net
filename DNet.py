@@ -22,9 +22,9 @@ def blockUNet(in_c, out_c, name, transposed=False, bn=True, relu=True, dropout=F
 
 
 class DNet(nn.Module):
-  def __init__(self, input_nc, output_nc, nf):
+  def __init__(self, input_nc, output_nc, nf, scale_factor=1):
     super(DNet, self).__init__()
-
+    self.scale_factor = scale_factor
     # input is 256 x 256
     layer_idx = 1
     name = 'layer%d' % layer_idx
@@ -198,13 +198,24 @@ class DNet(nn.Module):
     dout_add6 = self.add_transpose_bn_2(dout_add5)
     dout_add7 = self.add_relu_3(dout_add6)
     dout_add8 = self.add_transpose_conv_3(dout_add7)
-
     refine_depth = self.FNet(dout_add8,x)
     #depth_512= self.Hyper_Net_Cascade_Part(refine_depth,x)
     depth_512 = self.FrNet(refine_depth,x)
     #####   resolution 512  #######
-    
 
-    return dout_add8+depth_512*3
-    
-    
+    #### Upsampling ####
+    upsample = nn.Upsample(scale_factor=self.scale_factor, mode='bicubic')
+    #dout_add8_scale = upsample(dout_add8)
+    #depth_512_scale = upsample(depth_512)
+
+
+    #return dout_add8+depth_512*3
+    output = dout_add8+depth_512*3
+    max1 = output.max()
+    min1 = output.min()
+    print(f'max1={max1}, min1={min1}')
+    output_scale = upsample(output)
+    max2 = output_scale.max()
+    min2 = output_scale.min()
+    print(f'max2={max2}, min2={min2}')
+    return output_scale

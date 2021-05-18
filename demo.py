@@ -31,7 +31,6 @@ model_names = sorted(name for name in models.__dict__
     if name.islower() and not name.startswith("__")
     and callable(models.__dict__[name]))
 
-
 parser = argparse.ArgumentParser(description='PyTorch Face Reconstruction')
 parser.add_argument('--img_dir', metavar='DIR', default='', help='path to dataset')
 parser.add_argument('-j', '--workers', default=16, type=int, metavar='N',
@@ -39,6 +38,7 @@ parser.add_argument('-j', '--workers', default=16, type=int, metavar='N',
 parser.add_argument('-b', '--batch-size', default=1, type=int,
                     metavar='N', help='mini-batch size (default: 256)')
 parser.add_argument('--model_dir','-m', default='./model', type=str)
+parser.add_argument('--scale_factor','-s', default=1, type=int)
 
 
 
@@ -53,7 +53,8 @@ def find_nth(haystack, needle, n):
 def face_reconstruction(resume):
     global args
     args = parser.parse_args()
-    
+    scale_factor = args.scale_factor
+
     # load data and prepare dataset
     demo_list_file = 'img_list.txt'
     img_dir = './img/'
@@ -69,7 +70,7 @@ def face_reconstruction(resume):
    
 
     model = None
-    model = DNet(3,1,64)
+    model = DNet(3,1,64, scale_factor)
     if enable_cuda:
       model = torch.nn.DataParallel(model).cuda()
     else:
@@ -106,11 +107,18 @@ def face_reconstruction(resume):
         if os.path.exists(img_dir+img_name.replace('.png','_mask.png')):
         
            mask_n = cv2.imread(img_dir+img_name.replace('.png','_mask.png'))
+           mask_n = cv2.resize(mask_n, (mask_n.shape[1]*scale_factor, mask_n.shape[0]*scale_factor),
+                  interpolation = cv2.INTER_CUBIC)
+
            mask_n = mask_n.sum(2)
            mask_n[mask_n!=0]=1
            feat_batch  = output_shape.shape[0]
            out_im = output_shape[0,0,:,:]
            out_im = out_im*mask_n[:,:]
+           max3 = out_im.max()
+           min3 = out_im.min()
+           print(f'max3={max3}, min3={min3}')
+
            sio.savemat(out_mat_name,{'depth_mat':out_im})
            print(img_name)
             

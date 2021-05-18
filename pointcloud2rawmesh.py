@@ -2,7 +2,12 @@ import numpy as np
 import scipy.io as sio
 import cv2
 from scipy import ndimage
+import argparse
 
+parser = argparse.ArgumentParser(description='PyTorch Face Reconstruction')
+parser.add_argument('--scale_factor','-s', default=1, type=int)
+args = parser.parse_args()
+scale_factor = args.scale_factor
 
 cacd_list = open('img_list.txt','r')
 depth_mat_path = './output/'
@@ -16,10 +21,11 @@ for line in cacd_list:
     depth_mat_file = sio.loadmat(depth_abs_path)
     depth_mat = depth_mat_file['depth_mat']
     
-    
     image = cv2.imread(image_path+line.replace('.png','_crop.png'))
-    
-    
+    image = cv2.resize(image, (image.shape[1]*scale_factor, image.shape[0]*scale_factor),
+          interpolation = cv2.INTER_CUBIC)
+
+    dim_size = 512 * scale_factor
     mask = image.sum(2)
     mask[mask!=0]=1
     mask_index = np.where(mask==1)
@@ -33,9 +39,9 @@ for line in cacd_list:
     
     
 
-    face_index_map = np.zeros((512,512))
+    face_index_map = np.zeros((dim_size,dim_size))
     sum_nonzero = 1
-    for i in range(512):
+    for i in range(dim_size):
           #print i
           
           first_line = depth_mat[i,:]
@@ -52,7 +58,7 @@ for line in cacd_list:
           
              for j in range(len(index_first)):
                  lie = index_first[j]
-                 out_ply.write('v'+' '+str(i)+' '+str(lie)+' '+str(depth_mat[i,lie])+' '+str(image[i,lie,2])+' '+str(image[i,lie,1])+' '+str(image[i,lie,0])+'\n')
+                 out_ply.write('v'+' '+str(i/(float)scale_factor)+' '+str(lie)/(float)scale_factor)+' '+str(depth_mat[i,lie])+' '+str(image[i,lie,2])+' '+str(image[i,lie,1])+' '+str(image[i,lie,0])+'\n')
                  
              bb = range(0,len(index_first))
              bb = np.array(bb)
@@ -64,7 +70,7 @@ for line in cacd_list:
     
     
     num_face=0
-    for m in range(511):
+    for m in range(dim_size-1):
           
           fir_line = depth_mat[m,:]
           #fir_stack = fir_line.sum()

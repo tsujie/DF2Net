@@ -58,7 +58,7 @@ for line in cacd_list:
           
              for j in range(len(index_first)):
                  lie = index_first[j]
-                 out_ply.write('v'+' '+str(i/(float)scale_factor)+' '+str(lie)/(float)scale_factor)+' '+str(depth_mat[i,lie])+' '+str(image[i,lie,2])+' '+str(image[i,lie,1])+' '+str(image[i,lie,0])+'\n')
+                 out_ply.write('v'+' '+str(i/float(scale_factor))+' '+str(lie/float(scale_factor))+' '+str(depth_mat[i,lie])+' '+str(image[i,lie,2])+' '+str(image[i,lie,1])+' '+str(image[i,lie,0])+'\n')
                  
              bb = range(0,len(index_first))
              bb = np.array(bb)
